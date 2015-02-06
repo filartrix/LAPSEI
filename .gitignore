@@ -1,0 +1,14 @@
+    
+	
+	# ignore objects and archives, anywhere in the tree.
+    *.[oa]
+	
+	
+	#ignore Eclipse project files
+	.cproject
+	.project
+	.metadata/
+	
+	#ignore compiled folders
+	**/Debug/
+	**/Release/
