@@ -1,0 +1,29 @@
+22:02:26 **** Incremental Build of configuration Debug for project 2-Systick ****
+make all 
+Building file: ../src/main.c
+Invoking: MCU GCC Compiler
+%cd%
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -DNUCLEO_F401RE -DSTM32F4 -DSTM32F401RETx -DSTM32 -DUSE_STDPERIPH_DRIVER -DSTM32F401xx -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib" -I"C:/Users/Filippo/workspace/2-Systick/inc" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/CMSIS/core" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/CMSIS/device" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/StdPeriph_Driver/inc" -g3 -Wall -fmessage-length=0 -ffunction-sections -c -MMD -MP -MF"src/main.d" -MT"src/main.d" -o "src/main.o" "../src/main.c"
+Finished building: ../src/main.c
+ 
+Building file: ../src/syscalls.c
+Invoking: MCU GCC Compiler
+%cd%
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -DNUCLEO_F401RE -DSTM32F4 -DSTM32F401RETx -DSTM32 -DUSE_STDPERIPH_DRIVER -DSTM32F401xx -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib" -I"C:/Users/Filippo/workspace/2-Systick/inc" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/CMSIS/core" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/CMSIS/device" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/StdPeriph_Driver/inc" -g3 -Wall -fmessage-length=0 -ffunction-sections -c -MMD -MP -MF"src/syscalls.d" -MT"src/syscalls.d" -o "src/syscalls.o" "../src/syscalls.c"
+Finished building: ../src/syscalls.c
+ 
+Building file: ../src/system_stm32f4xx.c
+Invoking: MCU GCC Compiler
+%cd%
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -DNUCLEO_F401RE -DSTM32F4 -DSTM32F401RETx -DSTM32 -DUSE_STDPERIPH_DRIVER -DSTM32F401xx -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib" -I"C:/Users/Filippo/workspace/2-Systick/inc" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/CMSIS/core" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/CMSIS/device" -I"C:/Users/Filippo/workspace/stm32f401c-disco_stdperiph_lib/StdPeriph_Driver/inc" -g3 -Wall -fmessage-length=0 -ffunction-sections -c -MMD -MP -MF"src/system_stm32f4xx.d" -MT"src/system_stm32f4xx.d" -o "src/system_stm32f4xx.o" "../src/system_stm32f4xx.c"
+Finished building: ../src/system_stm32f4xx.c
+ 
+Building target: 2-Systick.elf
+Invoking: MCU GCC Linker
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -L"C:\Users\Filippo\workspace\stm32f401c-disco_stdperiph_lib\Debug" -T"C:\Users\Filippo\workspace\2-Systick\LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "2-Systick.elf"  ./startup/startup_stm32f401xx.o  ./src/main.o ./src/syscalls.o ./src/system_stm32f4xx.o   -lstm32f401c-disco_stdperiph_lib
+Finished building target: 2-Systick.elf
+ 
+make --no-print-directory post-build
+Generating binary:
+arm-none-eabi-objcopy -O binary "2-Systick.elf" "2-Systick.bin"
+ 
