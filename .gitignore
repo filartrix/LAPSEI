@@ -12,3 +12,6 @@
 	#ignore compiled folders
 	**/Debug/
 	**/Release/
+	*/Debug/
+	*/Release/
+	Debug/
