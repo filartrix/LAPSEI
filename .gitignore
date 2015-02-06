@@ -5,7 +5,7 @@
 	#ignore Eclipse project files
 	.cproject
 	.project
-	/.metadata/
+	.metadata
 	
 	#ignore compiled folders
 	**/Debug/
