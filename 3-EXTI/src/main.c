@@ -17,7 +17,7 @@ void LedSetup(void){
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
 	/* Enable the GPIO_LED Clock */
-	RCC_AHB1PeriphClockCmd(GPIOD, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 
 	/* Configure the GPIO_LED pin */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
