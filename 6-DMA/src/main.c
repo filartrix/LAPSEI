@@ -13,7 +13,7 @@
 #include "stm32f401_discovery.h"
 
 #define BUFFER_SIZE              32
-#define TIMEOUT_MAX              10000 /* Maximum timeout value */
+#define TIMEOUT_MAX              1000 /* Maximum timeout value */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
@@ -33,8 +33,9 @@ uint32_t aDST_Buffer[BUFFER_SIZE];
 
 /* Private function prototypes -----------------------------------------------*/
 static void DMA_Config(void);
+void NVIC_config(void);
 TestStatus Buffercmp(const uint32_t* pBuffer, uint32_t* pBuffer1, uint16_t BufferLength);
-
+__IO uint32_t    Timeout = TIMEOUT_MAX;
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -53,17 +54,28 @@ int main(void)
   /* Configure LEDs to monitor program status */
   STM_EVAL_LEDInit(LED3);
   STM_EVAL_LEDInit(LED4);
-
+  Timeout = TIMEOUT_MAX;
   /* Configure and enable the DMA Stream for Memory to Memory transfer */
   DMA_Config();
+  NVIC_config();
 
   /* Wait the end of transmission (the DMA Stream is disabled by Hardware at the
      end of the transfer) .
      There is also another way to check on end of transfer by monitoring the
      number of remaining data to be transferred. */
+
   /* while (DMA_GetCurrentMemoryTarget(DMA_STREAM) != 0) */  /* First method */
-  while (DMA_GetCmdStatus(DMA2_Stream0) != DISABLE)            /* Second method */
+
+  while (DMA_GetCmdStatus(DMA2_Stream0) != DISABLE && (Timeout-- > 0))/* Second method */
   {
+	  /* Check if a timeout condition occurred */
+	  if (Timeout == 0)
+	  {
+	    /* Manage the error: to simplify the code enter an infinite loop */
+	    while (1)
+	    {
+	    }
+	  }
     /*
        Since this code present a simple example of how to use DMA, it is just
        waiting on the end of transfer.
@@ -91,16 +103,28 @@ int main(void)
 }
 
 /**
+* @brief  Configure the DMA NVIC
+* @param  None
+* @retval None
+*/
+void NVIC_config(void){
+	  NVIC_InitTypeDef NVIC_InitStructure;
+	  /* Enable the DMA Stream IRQ Channel */
+	  NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream0_IRQn;
+	  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	  NVIC_Init(&NVIC_InitStructure);
+}
+
+/**
   * @brief  Configure the DMA controller according to the Stream parameters
-  *         defined in main.h file
   * @param  None
   * @retval None
   */
 static void DMA_Config(void)
 {
-  NVIC_InitTypeDef NVIC_InitStructure;
   DMA_InitTypeDef  DMA_InitStructure;
-  __IO uint32_t    Timeout = TIMEOUT_MAX;
 
   /* Enable DMA clock */
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
@@ -147,26 +171,9 @@ static void DMA_Config(void)
      The DMA Stream Enable bit is cleared immediately by hardware if there is an
      error in the configuration parameters and the transfer is no started (ie. when
      wrong FIFO threshold is configured ...) */
-  Timeout = TIMEOUT_MAX;
-  while ((DMA_GetCmdStatus(DMA2_Stream0) != ENABLE) && (Timeout-- > 0))
-  {
-  }
+  while ((DMA_GetCmdStatus(DMA2_Stream0) != ENABLE))
+  {  }
 
-  /* Check if a timeout condition occurred */
-  if (Timeout == 0)
-  {
-    /* Manage the error: to simplify the code enter an infinite loop */
-    while (1)
-    {
-    }
-  }
-
-  /* Enable the DMA Stream IRQ Channel */
-  NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream0_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
 }
 
 /**
