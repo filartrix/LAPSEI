@@ -34,11 +34,10 @@ char ch;
 
   /* Output a message on Hyperterminal using printf function */
   printf("\n\rUSART Printf Example: retarget the C library printf function to the USART\n\r");
-  ch = getchar();
-  ch = getchar();
+	while (USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET)
+	{}
+		ch = USART_ReceiveData(USART2);
   printf("\n\r USART2\n\r");
-  ch = getchar();
-   printf("\n\r USART3\n\r");
 
   while (1)
   {
@@ -130,16 +129,3 @@ int __io_putchar(int ch)
   return ch;
 }
 
-int __io_getchar(int ch)
-{
-  /* Place your implementation of fputc here */
-  /* e.g. write a character to the USART */
-	while (USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET)
-	{}
-		ch = USART_ReceiveData(USART2);
-
-  /* Loop until the end of transmission */
-
-
-  return ch;
-}
