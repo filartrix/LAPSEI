@@ -20,16 +20,21 @@ typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
 
 __IO TestStatus  TransferStatus = FAILED;
 
-const uint32_t aSRC_Const_Buffer[BUFFER_SIZE]= {
-                                    0x11111111,0x22222222,0x33333333,0x44444444,
-                                    0x55555555,0x66666666,0x77777777,0x88888888,
-                                    0x99999999,0xAAAAAAAA,0xBBBBBBBB,0xCCCCCCCC,
-                                    0xDDDDDDDD,0xEEEEEEEE,0xFFFFFFFF,0x00000000,
-                                    0xCAFFE000,0xDECADECA,0x2CAFFE00,0xDECADECA,
-                                    0xBADBAD00,0xCADECADE,0x00FACCE0,0x12121212,
-                                    0x23232323,0x34343434,0x696A6B6C,0x6D6E6F70,
-                                    0x71727374,0x75767778,0x797A7B7C,0x7D7E7F80};
-uint32_t aDST_Buffer[BUFFER_SIZE];
+// const uint32_t aSRC_Const_Buffer[BUFFER_SIZE]= {
+//                                    0x11111111,0x22222222,0x33333333,0x44444444,
+//                                    0x55555555,0x66666666,0x77777777,0x88888888,
+//                                    0x99999999,0xAAAAAAAA,0xBBBBBBBB,0xCCCCCCCC,
+//                                    0xDDDDDDDD,0xEEEEEEEE,0xFFFFFFFF,0x00000000,
+//                                    0xCAFFE000,0xDECADECA,0x2CAFFE00,0xDECADECA,
+//                                    0xBADBAD00,0xCADECADE,0x00FACCE0,0x12121212,
+//                                    0x23232323,0x34343434,0x696A6B6C,0x6D6E6F70,
+//                                    0x71727374,0x75767778,0x797A7B7C,0x7D7E7F80};
+// uint32_t aDST_Buffer[BUFFER_SIZE];
+
+
+const char sorgente[12] = {"test Stringa"};
+ char destinazione[12];
+
 
 /* Private function prototypes -----------------------------------------------*/
 static void DMA_Config(void);
@@ -56,8 +61,13 @@ int main(void)
   STM_EVAL_LEDInit(LED4);
   Timeout = TIMEOUT_MAX;
   /* Configure and enable the DMA Stream for Memory to Memory transfer */
-  DMA_Config();
-  NVIC_config();
+//  NVIC_config();
+//  DMA_Config();
+  int i;
+
+  for (i = 0; i<12;i++){
+	  destinazione[i]= sorgente[i];
+  }
 
   /* Wait the end of transmission (the DMA Stream is disabled by Hardware at the
      end of the transfer) .
@@ -85,7 +95,7 @@ int main(void)
   }
 
   /* Check if the transmitted and received data are equal */
-  TransferStatus = Buffercmp(aSRC_Const_Buffer, aDST_Buffer, BUFFER_SIZE);
+//  TransferStatus = Buffercmp(aSRC_Const_Buffer, aDST_Buffer, BUFFER_SIZE);
   /* TransferStatus = PASSED, if the transmitted and received data
      are the same */
   /* TransferStatus = FAILED, if the transmitted and received data
@@ -145,14 +155,14 @@ static void DMA_Config(void)
 
   /* Configure DMA Stream */
   DMA_InitStructure.DMA_Channel = DMA_Channel_0;
-  DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)aSRC_Const_Buffer;
-  DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)aDST_Buffer;
+  DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)sorgente+2;
+  DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)destinazione;
   DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToMemory;
-  DMA_InitStructure.DMA_BufferSize = (uint32_t)BUFFER_SIZE;
+  DMA_InitStructure.DMA_BufferSize = (uint32_t)10;
   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Enable;
   DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-  DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
-  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Word;
+  DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
   DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
   DMA_InitStructure.DMA_Priority = DMA_Priority_High;
   DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;
@@ -171,8 +181,8 @@ static void DMA_Config(void)
      The DMA Stream Enable bit is cleared immediately by hardware if there is an
      error in the configuration parameters and the transfer is no started (ie. when
      wrong FIFO threshold is configured ...) */
-  while ((DMA_GetCmdStatus(DMA2_Stream0) != ENABLE))
-  {  }
+//  while ((DMA_GetCmdStatus(DMA2_Stream0) != ENABLE))
+//  {  }
 
 }
 
